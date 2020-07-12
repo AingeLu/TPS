@@ -86,12 +86,12 @@ void ATPSCharacter::OnResetVR()
 
 void ATPSCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		Jump();
+	Jump();
 }
 
 void ATPSCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		StopJumping();
+	StopJumping();
 }
 
 void ATPSCharacter::TurnAtRate(float Rate)

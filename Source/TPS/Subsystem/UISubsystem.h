@@ -14,4 +14,13 @@ class TPS_API UUISubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 	
+public:
+
+	bool ShouldCreateSubsystem(UObject* Outer) const override;
+
+	/** Implement this for initialization of instances of the system */
+	void Initialize(FSubsystemCollectionBase& Collection) override;
+
+	/** Implement this for deinitialization of instances of the system */
+	void Deinitialize() override;
 };
