@@ -2,6 +2,7 @@
 
 
 #include "UISubsystem.h"
+#include "Blueprint/UserWidget.h"
 
 bool UUISubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
@@ -24,8 +25,9 @@ void UUISubsystem::Deinitialize()
 
 }
 
-void UUISubsystem::Open(FString name)
-{
+//template <typename... Args>
+//void UUISubsystem::Open(FString name, Args... args)
+//{
     //print("LUIManager.ShowUI name = " ..name)
     //local config = self.UIConfig[name]
     //if nil == config then
@@ -82,12 +84,45 @@ void UUISubsystem::Open(FString name)
     //if bpClass.OnShowWindow ~= nil and type(bpClass.OnShowWindow) == "function" then
     //    bpClass : OnShowWindow(...)
     //end
-}
+//}
 
 //function LUIManager : IsAdaptIphonex()
 //return  UE4.UMGLuaUtils.UMG_GetScreen() >= 2
 //end
 
+void UUISubsystem::Open(FString name)
+{
+    UE_LOG(LogTemp, Warning, TEXT("LUIManager.Open name : %s"), *name);
+
+    UUserWidget* widget = nullptr;
+    if (UserWidgetMap.Contains(name))
+    {
+        widget = UserWidgetMap[name];
+    }
+    
+    if (widget == nullptr)
+    {
+        FString bpPath = name;
+        widget = LoadUI(bpPath);
+        if (widget)
+        {
+            UserWidgetMap[name] = widget;
+        }
+    }
+
+    if (widget)
+    {
+        if (!widget->IsInViewport())
+        {
+            widget->AddToPlayerScreen(1);
+        }
+        else if (!widget->GetIsEnabled())
+        {
+            widget->SetIsEnabled(true);
+            widget->SetVisibility(ESlateVisibility::Visible);
+        }
+    }
+}
 
 void UUISubsystem::Close(FString name)
 {
@@ -97,29 +132,16 @@ void UUISubsystem::Close(FString name)
 UUserWidget* UUISubsystem::LoadUI(FString bpPath)
 {
 	//UClass* uclass = LoadClass<T>(NULL, *path);
-	FString fullBpPath = FString("Blueprint'" + bpPath + "_C'");
+	FString fullBpPath = FString("WidgetBlueprint'" + bpPath + "_C'");
 	UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::LoadUI fullBpPath : %s"), *fullBpPath);
 
-	auto uclass = LoadClass<UUserWidget>(NULL, *fullBpPath);
+	auto uclass = LoadClass<UUserWidget>(nullptr, *fullBpPath);
 	if (uclass == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("UUISubsystem::LoadUI uclass is null ."));
 		return nullptr;
 	}
 
-	UUserWidget* widget = CreateWidget<UUserWidget>(GetGameInstance(), uclass);;
-
-//	// using GameInstance as default
-//	UGameInstance* GameInstance = nullptr;
-//#if WITH_EDITOR
-//	UUnrealEdEngine* engine = Cast<UUnrealEdEngine>(GEngine);
-//	if (engine && engine->PlayWorld) GameInstance = engine->PlayWorld->GetGameInstance();
-//#else
-//	UGameEngine* engine = Cast<UGameEngine>(GEngine);
-//	if (engine) GameInstance = engine->GameInstance;
-//#endif
-//
-//	widget = CreateWidget<UUserWidget>(GameInstance, uclass);
-
-	return widget;
+	UUserWidget* widget = CreateWidget<UUserWidget>(GetGameInstance(), uclass);
+    return widget;
 }

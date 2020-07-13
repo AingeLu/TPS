@@ -6,25 +6,74 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
-#include "CanvasPanelSlot.h"
 #include "UISubsystem.generated.h"
 
-// UIœ‘ æ’ª
-//LUIManager.UIStack = {
-//	1 = {
-//		name = name1,
-//		uiLayer = {
-//			1 = {
-//				name = name1,
-//				args = { ... },
-//			},
-//			...
-//		}
-//	},
-//
-//	...
-//
-//}
+struct FUINode
+{
+	FUINode()
+	{
+
+	}
+
+	template <typename... Args>
+	FUINode(FString name, Args... args)
+	{
+		Name		= name;
+		int dummy[] = { 0, ((void)bar(std::forward<Args>(args)), 0) ... };
+	}
+
+	FORCEINLINE friend bool operator==(const FUINode& Lhs, const FUINode& Rhs) { return Lhs.Name == Rhs.Name; }
+
+public:
+	FString Name;
+};
+
+struct FUILayer
+{
+	FUILayer()
+	{
+
+	}
+
+	FUILayer(FString name)
+	{
+		Name = name;
+	}
+
+	FORCEINLINE friend bool operator==(const FUILayer& Lhs, const FUILayer& Rhs) { return Lhs.Name == Rhs.Name; }
+
+public:
+	template <typename... Args>
+	void AddNode(FString name, Args... args)
+	{
+		if (NodeMap.Contains(name))
+			return;
+
+		FUINode uiNode = FUINode(name, args);
+		Nodes.Add(uiNode);
+		NodeMap.Add(name, uiNode);
+	}
+
+	void RemoveNode(FString name)
+	{
+		if (NodeMap.Contains(name))
+		{
+			FUINode uiNode = NodeMap.FindRef(name);
+			Nodes.Remove(uiNode);
+			NodeMap.Remove(name);
+		}
+	}
+
+	FUINode GetNode(FString name)
+	{
+		return NodeMap.FindRef(name);
+	}
+
+public:
+	FString Name;
+	TArray<FUINode> Nodes;
+	TMap<FString, FUINode> NodeMap;
+};
 
 /**
  * 
@@ -45,12 +94,19 @@ public:
 	void Deinitialize() override;
 
 public:
+	//template <typename... Args>
+	//void Open(FString name, Args... args);
+
+	UFUNCTION(BlueprintCallable)
 	void Open(FString name);
+	UFUNCTION(BlueprintCallable)
 	void Close(FString name);
 
 private:
+	UFUNCTION(BlueprintCallable)
 	UUserWidget* LoadUI(FString bpPath);
 
 private:
-	TMap<FString, UUserWidget> userWidgetMap;
+	TMap<FString, UUserWidget*> UserWidgetMap;
+	//TArray<FUILayer> UILayerStack;
 };

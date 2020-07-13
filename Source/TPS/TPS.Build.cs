@@ -11,6 +11,20 @@ public class TPS : ModuleRules
 		PublicIncludePaths.AddRange(new string[] {
 			"TPS/Game",
 			"TPS/Player",
+			"TPS/Subsystem",
+			"TPS/UI"
+		});
+
+		PrivateIncludePaths.AddRange(new string[] {
+
+		});
+
+		PublicIncludePathModuleNames.AddRange( new string[] {
+
+		});
+
+		PrivateIncludePathModuleNames.AddRange(new string[] {
+
 		});
 
 		PublicDependencyModuleNames.AddRange(new string[] {
@@ -18,7 +32,12 @@ public class TPS : ModuleRules
 			"CoreUObject",
 			"Engine",
 			"InputCore",
-			"HeadMountedDisplay"
+			"HeadMountedDisplay",
+			"UMG",
+		});
+
+		PrivateDependencyModuleNames.AddRange(new string[] {
+
 		});
 	}
 }

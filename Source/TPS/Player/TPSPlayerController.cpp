@@ -3,3 +3,8 @@
 
 #include "TPSPlayerController.h"
 
+ATPSPlayerController::ATPSPlayerController(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+
+}

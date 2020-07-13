@@ -14,4 +14,6 @@ class TPS_API ATPSPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	ATPSPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };
