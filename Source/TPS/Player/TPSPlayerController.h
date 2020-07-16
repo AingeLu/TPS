@@ -16,4 +16,10 @@ class TPS_API ATPSPlayerController : public APlayerController
 	
 public:
 	ATPSPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	/** State entered when inactive (no possessed pawn, not spectating, etc). */
+	virtual void BeginInactiveState() override;
+
+	/** Called when leaving the inactive state */
+	virtual void EndInactiveState() override;
 };

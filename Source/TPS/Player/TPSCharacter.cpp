@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "TPSAbilitySystemComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogTPSCharacter, Log, All);
 
@@ -45,9 +46,89 @@ ATPSCharacter::ATPSCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	AbilitySystemComponent = CreateDefaultSubobject<UTPSAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	CharacterLevel = 1;
+	bAbilitiesInitialized = false;
 }
+
+void ATPSCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Initialize our abilities
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		if (GetLocalRole() == ROLE_Authority && !bAbilitiesInitialized)
+		{
+			// Grant abilities, but only on the server	
+			for (TSubclassOf<TPSGameplayAbility>& StartupAbility : GameplayAbilities)
+			{
+				AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(StartupAbility, GetCharacterLevel(), INDEX_NONE, this));
+			}
+
+			bAbilitiesInitialized = true;
+		}
+	}
+}
+
+void ATPSCharacter::UnPossessed()
+{
+	if (GetLocalRole() == ROLE_Authority && bAbilitiesInitialized)
+	{
+		// Remove any abilities added from a previous call
+		TArray<FGameplayAbilitySpecHandle> AbilitiesToRemove;
+		for (const FGameplayAbilitySpec& Spec : AbilitySystemComponent->GetActivatableAbilities())
+		{
+			if ((Spec.SourceObject == this) && GameplayAbilities.Contains(Spec.Ability->GetClass()))
+			{
+				AbilitiesToRemove.Add(Spec.Handle);
+			}
+		}
+
+		// Do in two passes so the removal happens after we have the full list
+		for (int32 i = 0; i < AbilitiesToRemove.Num(); i++)
+		{
+			AbilitySystemComponent->ClearAbility(AbilitiesToRemove[i]);
+		}
+
+		// Remove all of the passive gameplay effects that were applied by this character
+		FGameplayEffectQuery Query;
+		Query.EffectSource = this;
+		AbilitySystemComponent->RemoveActiveEffects(Query);
+
+		bAbilitiesInitialized = false;
+	}
+}
+
+void ATPSCharacter::OnRep_Controller()
+{
+	Super::OnRep_Controller();
+
+	// Our controller changed, must update ActorInfo on AbilitySystemComponent
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->RefreshAbilityActorInfo();
+	}
+}
+
+void ATPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	//DOREPLIFETIME(ATPSCharacter, CharacterLevel);
+}
+
+UAbilitySystemComponent* ATPSCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input

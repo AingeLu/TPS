@@ -11,8 +11,10 @@ public class TPS : ModuleRules
 		PublicIncludePaths.AddRange(new string[] {
 			"TPS/Game",
 			"TPS/Player",
-			"TPS/Subsystem",
-			"TPS/UI"
+			"TPS/Player/Components",
+			"TPS/Player/GameplayAbilities",
+			"TPS/Player/GameplayAbilities/Abilities",
+			"TPS/UI",
 		});
 
 		PrivateIncludePaths.AddRange(new string[] {
@@ -34,10 +36,15 @@ public class TPS : ModuleRules
 			"InputCore",
 			"HeadMountedDisplay",
 			"UMG",
+			"GameplayAbilities",
+			"GameplayTags",
+			"GameplayTasks"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
-
+			"GameplayAbilities",
+			"GameplayTags",
+			"GameplayTasks"
 		});
 	}
 }

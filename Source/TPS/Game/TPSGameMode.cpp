@@ -2,6 +2,7 @@
 
 #include "TPSGameMode.h"
 #include "TPSCharacter.h"
+#include "TPSPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATPSGameMode::ATPSGameMode()
@@ -12,4 +13,6 @@ ATPSGameMode::ATPSGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	PlayerControllerClass = ATPSPlayerController::StaticClass();
 }
