@@ -67,7 +67,7 @@ void ATPSCharacter::PossessedBy(AController* NewController)
 		if (GetLocalRole() == ROLE_Authority && !bAbilitiesInitialized)
 		{
 			// Grant abilities, but only on the server	
-			for (TSubclassOf<TPSGameplayAbility>& StartupAbility : GameplayAbilities)
+			for (TSubclassOf<UTPSGameplayAbility>& StartupAbility : GameplayAbilities)
 			{
 				AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(StartupAbility, GetCharacterLevel(), INDEX_NONE, this));
 			}
