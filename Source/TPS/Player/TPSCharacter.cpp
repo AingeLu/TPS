@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "TPSAbilitySystemComponent.h"
+#include "Net/UnrealNetwork.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogTPSCharacter, Log, All);
 
@@ -46,11 +47,14 @@ ATPSCharacter::ATPSCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
+	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
 	AbilitySystemComponent = CreateDefaultSubobject<UTPSAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+	// Create the attribute set, this replicates by default
+	AttributeSet = CreateDefaultSubobject<UTPSAttributeSet>(TEXT("AttributeSet"));
 
 	CharacterLevel = 1;
 	bAbilitiesInitialized = false;
@@ -121,7 +125,7 @@ void ATPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//DOREPLIFETIME(ATPSCharacter, CharacterLevel);
+	DOREPLIFETIME(ATPSCharacter, CharacterLevel);
 }
 
 UAbilitySystemComponent* ATPSCharacter::GetAbilitySystemComponent() const
@@ -160,13 +164,6 @@ void ATPSCharacter::HandleMoveSpeedChanged(float DeltaValue, const struct FGamep
 	{
 		OnMoveSpeedChanged(DeltaValue, EventTags);
 	}
-}
-
-void ATPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ATPSCharacter, CharacterLevel);
 }
 
 float ATPSCharacter::GetHealth() const

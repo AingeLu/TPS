@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "TPSGameplayAbility.h"
+#include "TPSAttributeSet.h"
 #include "TPSCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -160,6 +161,10 @@ private:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
 	class UTPSAbilitySystemComponent* AbilitySystemComponent;
+
+	/** List of attributes modified by the ability system */
+	UPROPERTY()
+	UTPSAttributeSet* AttributeSet;
 
 	/** Abilities to grant to this character on creation. These will be activated by tag or event and are not bound to specific inputs */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)

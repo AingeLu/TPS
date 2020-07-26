@@ -6,6 +6,7 @@
 #include "TPSCharacter.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
+#include "Net/UnrealNetwork.h"
 
 UTPSAttributeSet::UTPSAttributeSet()
 	: Health(1.f)
