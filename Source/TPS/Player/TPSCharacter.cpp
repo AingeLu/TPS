@@ -129,6 +129,97 @@ UAbilitySystemComponent* ATPSCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+void ATPSCharacter::HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, ATPSCharacter* InstigatorPawn, AActor* DamageCauser)
+{
+	OnDamaged(DamageAmount, HitInfo, DamageTags, InstigatorPawn, DamageCauser);
+}
+
+void ATPSCharacter::HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	// We only call the BP callback if this is not the initial ability setup
+	if (bAbilitiesInitialized)
+	{
+		OnHealthChanged(DeltaValue, EventTags);
+	}
+}
+
+void ATPSCharacter::HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	if (bAbilitiesInitialized)
+	{
+		OnManaChanged(DeltaValue, EventTags);
+	}
+}
+
+void ATPSCharacter::HandleMoveSpeedChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	// Update the character movement's walk speed
+	GetCharacterMovement()->MaxWalkSpeed = GetMoveSpeed();
+
+	if (bAbilitiesInitialized)
+	{
+		OnMoveSpeedChanged(DeltaValue, EventTags);
+	}
+}
+
+void ATPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPSCharacter, CharacterLevel);
+}
+
+float ATPSCharacter::GetHealth() const
+{
+	//if (!AttributeSet)
+	//	return 1.f;
+
+	//return AttributeSet->GetHealth();
+	return 0;
+}
+
+float ATPSCharacter::GetMaxHealth() const
+{
+	//return AttributeSet->GetMaxHealth();
+	return 0;
+}
+
+float ATPSCharacter::GetMana() const
+{
+	//return AttributeSet->GetMana();
+	return 0;
+}
+
+float ATPSCharacter::GetMaxMana() const
+{
+	//return AttributeSet->GetMaxMana();
+	return 0;
+}
+
+float ATPSCharacter::GetMoveSpeed() const
+{
+	//return AttributeSet->GetMoveSpeed();
+	return 0;
+}
+
+int32 ATPSCharacter::GetCharacterLevel() const
+{
+	return CharacterLevel;
+}
+
+bool ATPSCharacter::SetCharacterLevel(int32 NewLevel)
+{
+	//if (CharacterLevel != NewLevel && NewLevel > 0)
+	//{
+	//	// Our level changed so we need to refresh abilities
+	//	RemoveStartupGameplayAbilities();
+	//	CharacterLevel = NewLevel;
+	//	AddStartupGameplayAbilities();
+
+	//	return true;
+	//}
+	return false;
+}
 
 //////////////////////////////////////////////////////////////////////////
 // Input

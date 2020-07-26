@@ -14,6 +14,7 @@ public class TPS : ModuleRules
 			"TPS/Player/Components",
 			"TPS/Player/GameplayAbilities",
 			"TPS/Player/GameplayAbilities/Abilities",
+			"TPS/Player/GameplayAbilities/Abilities/Tasks",
 			"TPS/UI",
 		});
 
@@ -42,6 +43,8 @@ public class TPS : ModuleRules
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
+			"OnlineSubsystem",
+			"OnlineSubsystemUtils",
 			"GameplayAbilities",
 			"GameplayTags",
 			"GameplayTasks"
