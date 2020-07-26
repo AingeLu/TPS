@@ -166,6 +166,10 @@ protected:
 	UPROPERTY()
 	UTPSAttributeSet* AttributeSet;
 
+	/** Passive gameplay effects applied on creation */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Abilities)
+	TArray<TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
+
 	/** Abilities to grant to this character on creation. These will be activated by tag or event and are not bound to specific inputs */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
 	TArray<TSubclassOf<UTPSGameplayAbility>> GameplayAbilities;

@@ -76,6 +76,19 @@ void ATPSCharacter::PossessedBy(AController* NewController)
 				AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(StartupAbility, GetCharacterLevel(), INDEX_NONE, this));
 			}
 
+			// Now apply passives
+			for (TSubclassOf<UGameplayEffect>& GameplayEffect : PassiveGameplayEffects)
+			{
+				FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+				EffectContext.AddSourceObject(this);
+
+				FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, GetCharacterLevel(), EffectContext);
+				if (NewHandle.IsValid())
+				{
+					FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
+				}
+			}
+
 			bAbilitiesInitialized = true;
 		}
 	}
