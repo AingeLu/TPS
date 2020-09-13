@@ -6,15 +6,13 @@
 #include "UObject/ObjectMacros.h"
 #include "UIConfig.generated.h"
 
-
 UENUM(BlueprintType)
 enum class EUIMode : uint8
 {
-	MODE_NONE = 0,
-	MODE_MAIN,
-	MODE_FULL,
-	MODE_COVER,
-	MODE_Max
+	NONE = 0,
+	MODE_MAIN,	// 主界面（通常表示全屏）
+	MODE_TIPS,		// 提示框（通常表示非全屏）
+	MAX,
 };
 
 USTRUCT(BlueprintType)
@@ -23,12 +21,21 @@ struct FUIInfo
 	GENERATED_USTRUCT_BODY()
 
 public:
-	FUIInfo() {}
-	FUIInfo(FString name, FString path, uint8 layer = 1, EUIMode mode = EUIMode::MODE_MAIN);
+	FUIInfo()
+	{
+		Path = "";
+		Layer = 0;
+		Mode = EUIMode::NONE;
+	}
+	
+	FUIInfo(FString path, uint8 layer = 1, EUIMode mode = EUIMode::MODE_MAIN)
+	{
+		Path = path;
+		Layer = layer;
+		Mode = mode;
+	}
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI)
-	FString Name;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI)
 	FString Path;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI)
@@ -37,25 +44,30 @@ public:
 	EUIMode Mode;
 };
 
+UENUM(BlueprintType)
+enum class EUINames : uint8
+{
+	NONE = 0,
+	UIBattleMain,
+
+	MAX,
+};
+
 /**
  * 
  */
-UCLASS(BlueprintType, hideCategories = Object, meta = (BlueprintUIConfig))
-class TPS_API UUIConfig : public UObject
+USTRUCT(BlueprintType)
+struct TPS_API FUIConfig
 {
 	GENERATED_BODY()
 
 public:
-	UUIConfig();
-	~UUIConfig();
+	FUIConfig();
+	~FUIConfig();
 	
-	void AddUIInfo(FString name, FString path, uint8 layer = 1, EUIMode mode = EUIMode::MODE_MAIN);
-	FUIInfo GetUIInfo(FString name);
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI)
-	FUIInfo UIBattleMain;
+	void AddUIInfo(EUINames name, FString path, uint8 layer = 1, EUIMode mode = EUIMode::MODE_MAIN);
+	bool GetUIInfo(EUINames name, FUIInfo& outInfo);
 
 private:
-	TMap<FString, FUIInfo> UIInfoMap;
+	TMap<EUINames, FUIInfo> UIMap;
 };

@@ -8,7 +8,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogUISub, Log, All);
 
 UUISubsystem::UUISubsystem()
 {
-    UIConfig = CreateDefaultSubobject<UUIConfig>(TEXT("UIConfig"));
+
 }
 
 UUISubsystem::~UUISubsystem()
@@ -37,15 +37,23 @@ void UUISubsystem::Deinitialize()
 
 }
 
-void UUISubsystem::Open(FString name)
+void UUISubsystem::Open(EUINames name)
 {
-    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::Open name : %s"), *name);
+    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::Open name : %d"), name);
 
-    FUIInfo uiInfo = UIConfig->GetUIInfo(name);
-    if (uiInfo.Path.IsEmpty())
+    // 判断是否已经在UIConfig
+    FUIInfo uiInfo;
+    if (!UIConfig.GetUIInfo(name, uiInfo) || uiInfo.Path.IsEmpty())
     {
-        UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::Open Path is Empty. name : %s"), *name);
+        UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::Open Path is Empty. name : %d"), name);
         return;
+    }
+
+    // 判断是否已经在UIStack
+    FUINode uiNode;
+    if (UIStack.FindUI(name, uiNode))
+    {
+        CloseUINode(uiNode);
     }
 
     UUserWidget* widget = nullptr;
@@ -74,77 +82,22 @@ void UUISubsystem::Open(FString name)
             widget->SetVisibility(ESlateVisibility::Visible);
         }
 
-        switch (uiInfo.Mode)
-        {
-        case EUIMode::MODE_MAIN:
-            break;
-        case EUIMode::MODE_FULL:
-            break;
-        case EUIMode::MODE_COVER:
-            break;
-        default:
-            break;
-        }
+        UIStack.PushUI(name, uiInfo);
 
         TopUIInfo = uiInfo;
     }
 }
 
-void UUISubsystem::OpenEx(FUIInfo uiInfo)
+void UUISubsystem::Close(EUINames name)
 {
-    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::OpenEx uiInfo.Name : %s"), *uiInfo.Name);
+    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem.Close name : %s"), name);
 
-    if (uiInfo.Path.IsEmpty())
+    FUIInfo uiInfo;
+    if (!UIConfig.GetUIInfo(name, uiInfo) || uiInfo.Path.IsEmpty())
     {
-        UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::OpenEx uiInfo.Path is Empty. uiInfo.Name : %s"), *uiInfo.Name);
+        UE_LOG(LogTemp, Warning, TEXT("UUISubsystem::Close Path is Empty. name : %d"), name);
         return;
     }
-
-    UUserWidget* widget = nullptr;
-    if (UserWidgetMap.Contains(uiInfo.Name) && UserWidgetMap.Find(uiInfo.Name))
-    {
-        widget = *UserWidgetMap.Find(uiInfo.Name);
-    }
-    else
-    {
-        widget = LoadUI(uiInfo.Path);
-        if (widget)
-        {
-            UserWidgetMap.Add(uiInfo.Name, widget);
-        }
-    }
-
-    if (widget)
-    {
-        if (!widget->IsInViewport())
-        {
-            widget->AddToPlayerScreen(1);
-        }
-        else if (!widget->GetIsEnabled())
-        {
-            widget->SetIsEnabled(true);
-            widget->SetVisibility(ESlateVisibility::Visible);
-        }
-
-        switch (uiInfo.Mode)
-        {
-        case EUIMode::MODE_MAIN:
-            break;
-        case EUIMode::MODE_FULL:
-            break;
-        case EUIMode::MODE_COVER:
-            break;
-        default:
-            break;
-        }
-
-        TopUIInfo = uiInfo;
-    }
-}
-
-void UUISubsystem::Close(FString name)
-{
-    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem.Close name : %s"), *name);
 
     if (UserWidgetMap.Contains(name) && UserWidgetMap.Find(name))
     {
@@ -155,25 +108,20 @@ void UUISubsystem::Close(FString name)
             {
                 widget->RemoveFromViewport();
             }
+
+            UIStack.PopUI(name, uiInfo);
         }
     }
 }
 
-void UUISubsystem::CloseEx(FUIInfo uiInfo)
+void UUISubsystem::CloseUINode(FUINode node)
 {
-    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem.CloseEx uiInfo.Name : %s"), *uiInfo.Name);
-
-    if (UserWidgetMap.Contains(uiInfo.Name) && UserWidgetMap.Find(uiInfo.Name))
+    for (FUINode& child : node.GetChildren())
     {
-        UUserWidget* widget = *UserWidgetMap.Find(uiInfo.Name);
-        if (widget)
-        {
-            if (widget->IsInViewport())
-            {
-                widget->RemoveFromViewport();
-            }
-        }
+        CloseUINode(child);
     }
+
+    Close(node.GetName());
 }
 
 UUserWidget* UUISubsystem::LoadUI(FString path)

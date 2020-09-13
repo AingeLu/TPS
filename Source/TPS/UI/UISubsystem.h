@@ -33,14 +33,11 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void Open(FString name);
+	void Open(EUINames name);
 	UFUNCTION(BlueprintCallable)
-	void OpenEx(FUIInfo uiInfo);
-
+	void Close(EUINames name = EUINames::NONE);
 	UFUNCTION(BlueprintCallable)
-	void Close(FString name);
-	UFUNCTION(BlueprintCallable)
-	void CloseEx(FUIInfo uiInfo);
+	void CloseUINode(FUINode node);
 
 	UFUNCTION(BlueprintCallable)
 	FUIInfo GetTopUIInfo() { return TopUIInfo; }
@@ -49,14 +46,12 @@ private:
 	UFUNCTION(BlueprintCallable)
 	UUserWidget* LoadUI(FString path);
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI)
-	UUIConfig* UIConfig;
-
 private:
 	// 当前显示在最顶层的UI
 	FUIInfo TopUIInfo;
 
-	TMap<FString, UUserWidget*> UserWidgetMap;
-	TArray<FUILayer> UILayerStack;
+	FUIConfig UIConfig;
+	FUIStack UIStack;
+
+	TMap<EUINames, UUserWidget*> UserWidgetMap;
 };

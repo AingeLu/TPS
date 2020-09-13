@@ -3,77 +3,73 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UIConfig.h"
+#include "UIStack.generated.h"
 
-struct FUINode
+struct FUINode;
+
+USTRUCT(BlueprintType)
+struct TPS_API FUINode
 {
-	FUINode() {}
+	GENERATED_USTRUCT_BODY()
 
-	template <typename... Args>
-	FUINode(FString name, Args... args)
+public:
+	FUINode()
 	{
-		Name = name;
-		int dummy[] = { 0, ((void)bar(std::forward<Args>(args)), 0) ... };
+		Name = EUINames::NONE;
+		Info = FUIInfo();
+		Parent = nullptr;
 	}
 
+	FUINode(EUINames name, FUIInfo info, FUINode* parent = nullptr)
+	{
+		Name = name;
+		Info = info;
+		Parent = parent;
+	}
+
+public:
 	FORCEINLINE friend bool operator==(const FUINode& Lhs, const FUINode& Rhs) { return Lhs.Name == Rhs.Name; }
 
 public:
-	FString Name;
-};
-
-struct FUILayer
-{
-	FUILayer() { }
-
-	FUILayer(FString name)
-	{
-		Name = name;
-	}
-
-	FORCEINLINE friend bool operator==(const FUILayer& Lhs, const FUILayer& Rhs) { return Lhs.Name == Rhs.Name; }
+	EUINames GetName() { return Name; }
+	FUIInfo GetInfo() { return Info; }
 
 public:
-	template <typename... Args>
-	void AddNode(FString name, Args... args)
-	{
-		if (NodeMap.Contains(name))
-			return;
-
-		FUINode uiNode = FUINode(name, args);
-		Nodes.Add(uiNode);
-		NodeMap.Add(name, uiNode);
-	}
-
-	void RemoveNode(FString name)
-	{
-		if (NodeMap.Contains(name))
-		{
-			FUINode uiNode = NodeMap.FindRef(name);
-			Nodes.Remove(uiNode);
-			NodeMap.Remove(name);
-		}
-	}
-
-	FUINode GetNode(FString name)
-	{
-		return NodeMap.FindRef(name);
-	}
+	TArray<FUINode> GetChildren() { return Children; }
+	void AddChild(const FUINode& uiNode) { Children.Add(uiNode); }
+	void RemoveChild(const FUINode& uiNode);
+	void RemoveAllChildren();
 
 public:
-	FString Name;
-	TArray<FUINode> Nodes;
-	TMap<FString, FUINode> NodeMap;
+	FUINode* GetParent() { return Parent; }
+	void RemoveFromParent();
+
+private:
+	EUINames Name;
+	FUIInfo Info;
+	TArray<FUINode> Children;
+	FUINode* Parent;
 };
+
 
 /**
  * 
  */
-class TPS_API UIStack
+USTRUCT(BlueprintType)
+struct TPS_API FUIStack
 {
-public:
-	UIStack();
-	~UIStack();
+	GENERATED_BODY()
 
+public:
+	FUIStack();
+	~FUIStack();
+
+public:
+	void PushUI(EUINames name, const FUIInfo uiInfo);
+	void PopUI(EUINames name, const FUIInfo uiInfo);
+
+	bool FindUI(EUINames name, FUINode& outNode);
 private:
-	TArray<FUILayer> Stack;
+	TArray<FUINode> UINodes;
 };

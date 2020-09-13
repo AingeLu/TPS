@@ -3,37 +3,29 @@
 
 #include "UIConfig.h"
 
-FUIInfo::FUIInfo(FString name, FString path, uint8 layer, EUIMode mode)
-{
-	Name = name;
-	Path = path;
-	Layer = layer;
-	Mode = mode;
-}
-
-UUIConfig::UUIConfig()
+FUIConfig::FUIConfig()
 {
 	// TODO: 蓝图的路径需要在结尾加 _C
-	UIBattleMain = FUIInfo("UIBattleMain", "WidgetBlueprint'/Game/UI/BattleMain/UIBattleMain.UIBattleMain_C'");
-	UIInfoMap.Add("UIBattleMain", UIBattleMain);
+	AddUIInfo(EUINames::UIBattleMain, "WidgetBlueprint'/Game/UI/BattleMain/UIBattleMain.UIBattleMain_C'");
 }
 
-UUIConfig::~UUIConfig()
+FUIConfig::~FUIConfig()
 {
-	UIInfoMap.Remove("UIBattleMain");
+	UIMap.Remove(EUINames::UIBattleMain);
 }
 
-void UUIConfig::AddUIInfo(FString name, FString path, uint8 layer, EUIMode mode)
+void FUIConfig::AddUIInfo(EUINames name, FString path, uint8 layer, EUIMode mode)
 {
-	UIInfoMap.Add(name, FUIInfo(name, path, layer, mode));
+	UIMap.Add(name, FUIInfo(path, layer, mode));
 }
 
-FUIInfo UUIConfig::GetUIInfo(FString name)
+bool FUIConfig::GetUIInfo(EUINames name, FUIInfo& outInfo)
 {
-	if (UIInfoMap.Contains(name) && UIInfoMap.Find(name))
+	if (UIMap.Contains(name) && UIMap.Find(name))
 	{
-		return *UIInfoMap.Find(name);
+		outInfo = *UIMap.Find(name);
+		return true;
 	}
 
-	return FUIInfo(name, "");
+	return false;
 }
