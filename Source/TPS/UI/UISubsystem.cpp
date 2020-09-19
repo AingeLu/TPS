@@ -49,48 +49,39 @@ void UUISubsystem::Open(EUINames name)
         return;
     }
 
-    // 判断是否已经在UIStack
-    FUINode uiNode;
-    if (UIStack.FindUI(name, uiNode))
+    if (ShowUserWidget(name, uiInfo))
     {
-        CloseUINode(uiNode);
-    }
+        UIStack.PopUI(name, uiInfo);
 
-    UUserWidget* widget = nullptr;
-    if (UserWidgetMap.Contains(name) && UserWidgetMap.Find(name))
-    {
-        widget = *UserWidgetMap.Find(name);
-    }
-    else
-    {
-        widget = LoadUI(uiInfo.Path);
-        if (widget)
+        // 全屏界面
+        if (uiInfo.Mode == EUIMode::MODE_MAIN)
         {
-            UserWidgetMap.Add(name, widget);
+            // 隐藏栈内的UINode
+            for (FUINode uiNode : UIStack.GetUINodes())
+            {
+                if (uiNode.GetName() == name)
+                    continue;
+                
+                HideUINode(uiNode);
+            }
         }
-    }
-
-    if (widget)
-    {
-        if (!widget->IsInViewport())
+        else
         {
-            widget->AddToPlayerScreen(1);
-        }
-        else if (!widget->GetIsEnabled())
-        {
-            widget->SetIsEnabled(true);
-            widget->SetVisibility(ESlateVisibility::Visible);
+            // 隐藏栈顶其它非全屏界面
+            for (FUINode& child : UIStack.TopUINode().GetChildren())
+            {
+                HideUINode(child);
+            }
         }
 
+        // 将UI插入栈顶
         UIStack.PushUI(name, uiInfo);
-
-        TopUIInfo = uiInfo;
     }
 }
 
 void UUISubsystem::Close(EUINames name)
 {
-    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem.Close name : %s"), name);
+    UE_LOG(LogTemp, Warning, TEXT("UUISubsystem.Close name : %d"), name);
 
     FUIInfo uiInfo;
     if (!UIConfig.GetUIInfo(name, uiInfo) || uiInfo.Path.IsEmpty())
@@ -99,40 +90,99 @@ void UUISubsystem::Close(EUINames name)
         return;
     }
 
-    if (UserWidgetMap.Contains(name) && UserWidgetMap.Find(name))
+    if (HideUserWidget(name))
     {
-        UUserWidget* widget = *UserWidgetMap.Find(name);
-        if (widget)
-        {
-            if (widget->IsInViewport())
-            {
-                widget->RemoveFromViewport();
-            }
+        UIStack.PopUI(name, uiInfo);
 
-            UIStack.PopUI(name, uiInfo);
+        // 全屏界面
+        if (uiInfo.Mode == EUIMode::MODE_MAIN)
+        {
+            // 显示栈顶的UINode
+            ShowUINode(UIStack.TopUINode());
         }
     }
 }
 
-void UUISubsystem::CloseUINode(FUINode node)
+UUserWidget* UUISubsystem::FindUserWidget(EUINames name)
+{
+    UUserWidget* widget = nullptr;
+    if (UserWidgetMap.Contains(name) && UserWidgetMap.Find(name))
+    {
+        widget = *UserWidgetMap.Find(name);
+    }
+
+    return widget;
+}
+
+UUserWidget* UUISubsystem::LoadUserWidget(EUINames name, FUIInfo uiInfo)
+{
+    UUserWidget* widget = FindUserWidget(name);
+    if (widget == nullptr)
+    {
+        UClass* widgetClass = LoadClass<UUserWidget>(nullptr, *uiInfo.Path);
+        if (widgetClass == nullptr)
+        {
+            UE_LOG(LogTemp, Error, TEXT("UUISubsystem::LoadUserWidget WidgetClass is null. path : %s"), *uiInfo.Path);
+            return nullptr;
+        }
+
+        widget = CreateWidget<UUserWidget>(GetGameInstance(), widgetClass);
+        UserWidgetMap.Add(name, widget);
+    }
+
+    return widget;
+}
+
+bool UUISubsystem::ShowUserWidget(EUINames name, FUIInfo uiInfo)
+{
+    UUserWidget* widget = LoadUserWidget(name, uiInfo);
+    if (widget == nullptr)
+        return false;
+
+    if (widget->IsInViewport())
+    {
+        widget->SetIsEnabled(true);
+        widget->SetVisibility(ESlateVisibility::Visible);
+    }
+    else
+    {
+        widget->AddToPlayerScreen(uiInfo.Layer);
+        widget->SetVisibility(ESlateVisibility::Visible);
+    }
+
+    return true;
+}
+
+bool UUISubsystem::HideUserWidget(EUINames name)
+{
+    UUserWidget* widget = FindUserWidget(name);
+    if (widget)
+    {
+        widget->SetIsEnabled(false);
+        widget->SetVisibility(ESlateVisibility::Collapsed);
+
+        return true;
+    }
+
+    return false;
+}
+
+void UUISubsystem::ShowUINode(FUINode node)
 {
     for (FUINode& child : node.GetChildren())
     {
-        CloseUINode(child);
+        ShowUINode(child);
     }
 
-    Close(node.GetName());
+    ShowUserWidget(node.GetName(), node.GetInfo());
 }
 
-UUserWidget* UUISubsystem::LoadUI(FString path)
+void UUISubsystem::HideUINode(FUINode node)
 {
-    UClass* widgetClass = LoadClass<UUserWidget>(nullptr, *path);
-	if (widgetClass == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("UUISubsystem::LoadUI WidgetClass is null. path : %s"), *path);
-		return nullptr;
-	}
+    for (FUINode& child : node.GetChildren())
+    {
+        HideUINode(child);
+    }
 
-	UUserWidget* widget = CreateWidget<UUserWidget>(GetGameInstance(), widgetClass);
-    return widget;
+    HideUserWidget(node.GetName());
 }

@@ -68,8 +68,11 @@ public:
 public:
 	void PushUI(EUINames name, const FUIInfo uiInfo);
 	void PopUI(EUINames name, const FUIInfo uiInfo);
-
 	bool FindUI(EUINames name, FUINode& outNode);
+
+	TArray<FUINode> GetUINodes() { return UINodes; }
+	FUINode& TopUINode();
+
 private:
 	TArray<FUINode> UINodes;
 };

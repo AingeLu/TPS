@@ -106,3 +106,8 @@ bool FUIStack::FindUI(EUINames name, FUINode& outNode)
 
     return false;
 }
+
+FUINode& FUIStack::TopUINode()
+{
+    return UINodes.Top();
+}

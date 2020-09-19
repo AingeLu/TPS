@@ -36,20 +36,25 @@ public:
 	void Open(EUINames name);
 	UFUNCTION(BlueprintCallable)
 	void Close(EUINames name = EUINames::NONE);
-	UFUNCTION(BlueprintCallable)
-	void CloseUINode(FUINode node);
-
-	UFUNCTION(BlueprintCallable)
-	FUIInfo GetTopUIInfo() { return TopUIInfo; }
 
 private:
 	UFUNCTION(BlueprintCallable)
-	UUserWidget* LoadUI(FString path);
+	UUserWidget* FindUserWidget(EUINames name);
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* LoadUserWidget(EUINames name, FUIInfo uiInfo);
+
+	UFUNCTION(BlueprintCallable)
+	bool ShowUserWidget(EUINames name, FUIInfo uiInfo);
+	UFUNCTION(BlueprintCallable)
+	bool HideUserWidget(EUINames name);
 
 private:
-	// 当前显示在最顶层的UI
-	FUIInfo TopUIInfo;
+	UFUNCTION(BlueprintCallable)
+	void ShowUINode(FUINode node);
+	UFUNCTION(BlueprintCallable)
+	void HideUINode(FUINode node);
 
+private:
 	FUIConfig UIConfig;
 	FUIStack UIStack;
 

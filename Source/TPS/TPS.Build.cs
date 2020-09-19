@@ -10,12 +10,15 @@ public class TPS : ModuleRules
 
 		PublicIncludePaths.AddRange(new string[] {
 			"TPS/Game",
+
 			"TPS/Player",
 			"TPS/Player/Components",
 			"TPS/Player/GameplayAbilities",
 			"TPS/Player/GameplayAbilities/Abilities",
 			"TPS/Player/GameplayAbilities/Abilities/Tasks",
+
 			"TPS/UI",
+			"TPS/UI/Battle",
 		});
 
 		PrivateIncludePaths.AddRange(new string[] {
@@ -45,6 +48,7 @@ public class TPS : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"OnlineSubsystem",
 			"OnlineSubsystemUtils",
+			"UMG",
 			"GameplayAbilities",
 			"GameplayTags",
 			"GameplayTasks"

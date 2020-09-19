@@ -8,6 +8,25 @@
 ATPSPlayerController::ATPSPlayerController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+	bShowMouseCursor = true;
+}
+
+void ATPSPlayerController::BeginPlayingState()
+{
+	Super::BeginPlayingState();
+
+	// ¿Í»§¶Ë
+	if (GetLocalRole() == ENetRole::ROLE_AutonomousProxy || GetNetMode() == ENetMode::NM_Standalone)
+	{
+		UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(this);
+		UUISubsystem* UISubsystem = GameInstance->GetSubsystem<UUISubsystem>();
+		UISubsystem->Open(EUINames::UIBattleMain);
+	}
+}
+
+void ATPSPlayerController::EndPlayingState()
+{
+	Super::EndPlayingState();
 
 }
 
@@ -15,9 +34,6 @@ void ATPSPlayerController::BeginInactiveState()
 {
 	Super::BeginInactiveState();
 
-	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(this);
-	UUISubsystem* UISubsystem = GameInstance->GetSubsystem<UUISubsystem>();
-	//UISubsystem->Open(FUIConfig::BattleMain);
 }
 
 void ATPSPlayerController::EndInactiveState()
