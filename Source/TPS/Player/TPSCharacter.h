@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
-#include "TPSGameplayAbility.h"
+#include "TPSAbility.h"
 #include "TPSAttributeSet.h"
 #include "TPSCharacter.generated.h"
 
@@ -172,7 +172,7 @@ protected:
 
 	/** Abilities to grant to this character on creation. These will be activated by tag or event and are not bound to specific inputs */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
-	TArray<TSubclassOf<UTPSGameplayAbility>> GameplayAbilities;
+	TArray<TSubclassOf<UTPSAbility>> GameplayAbilities;
 
 	/** The level of this character, should not be modified directly once it has already spawned */
 	UPROPERTY(EditAnywhere, Replicated, Category = Abilities)

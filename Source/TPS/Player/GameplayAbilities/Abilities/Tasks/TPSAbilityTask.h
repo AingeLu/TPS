@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/GameplayAbility.h"
-#include "TPSGameplayAbility.generated.h"
+#include "Abilities/Tasks/AbilityTask.h"
+#include "TPSAbilityTask.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPS_API UTPSGameplayAbility : public UGameplayAbility
+class TPS_API UTPSAbilityTask : public UAbilityTask
 {
 	GENERATED_BODY()
 	

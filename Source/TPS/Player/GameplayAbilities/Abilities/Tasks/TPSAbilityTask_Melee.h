@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/Tasks/AbilityTask.h"
+#include "TPSAbilityTask.h"
 #include "TPSAbilityTask_Melee.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTPSMeleeDelegate);
@@ -12,7 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTPSMeleeDelegate);
  * 
  */
 UCLASS(Blueprintable)
-class TPS_API UTPSAbilityTask_Melee : public UAbilityTask
+class TPS_API UTPSAbilityTask_Melee : public UTPSAbilityTask
 {
 	GENERATED_UCLASS_BODY()
 	
