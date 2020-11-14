@@ -97,8 +97,11 @@ void UUISubsystem::Close(EUINames name)
         // 全屏界面
         if (uiInfo.Mode == EUIMode::MODE_MAIN)
         {
-            // 显示栈顶的UINode
-            ShowUINode(UIStack.TopUINode());
+            if (!UIStack.Empty())
+            {
+                // 显示栈顶的UINode
+                ShowUINode(UIStack.TopUINode());
+            }
         }
     }
 }

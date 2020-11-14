@@ -72,6 +72,7 @@ public:
 
 	TArray<FUINode> GetUINodes() { return UINodes; }
 	FUINode& TopUINode();
+	bool Empty() { return UINodes.Num() <= 0; }
 
 private:
 	TArray<FUINode> UINodes;
