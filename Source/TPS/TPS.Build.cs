@@ -13,10 +13,11 @@ public class TPS : ModuleRules
 
 			"TPS/Player",
 			"TPS/Player/Components",
-			"TPS/Player/GameplayAbilities",
-			"TPS/Player/GameplayAbilities/Abilities",
-			"TPS/Player/GameplayAbilities/Abilities/Tasks",
-			"TPS/Player/GameplayAbilities/Abilities/Targets",
+
+			"TPS/GameplayAbilities",
+			"TPS/GameplayAbilities/Abilities",
+			"TPS/GameplayAbilities/Abilities/Tasks",
+			"TPS/GameplayAbilities/Abilities/Targets",
 
 			"TPS/UI",
 			"TPS/UI/Battle",
