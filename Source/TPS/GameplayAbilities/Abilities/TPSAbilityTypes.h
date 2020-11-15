@@ -13,15 +13,6 @@ class UTPSAbilitySystemComponent;
 class UGameplayEffect;
 class UTPSAbilityTarget;
 
-///**
-// * 
-// */
-//UCLASS()
-//class TPS_API UTPSAbilityTypes : public UObject
-//{
-//	GENERATED_BODY()
-//	
-//};
 
 /**
  * Struct defining a list of gameplay effects, a tag, and targeting info
