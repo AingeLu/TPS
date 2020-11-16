@@ -9,10 +9,8 @@ public class TPS : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicIncludePaths.AddRange(new string[] {
-			"TPS/Game",
-
-			"TPS/Player",
-			"TPS/Player/Components",
+			"TPS",
+			"TPS/Components",
 
 			"TPS/GameplayAbilities",
 			"TPS/GameplayAbilities/Abilities",

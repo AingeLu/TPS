@@ -6,7 +6,7 @@
 FUIConfig::FUIConfig()
 {
 	// TODO: 蓝图的路径需要在结尾加 _C
-	AddUIInfo(EUINames::UIBattleMain, "WidgetBlueprint'/Game/UI/Battle/UIBattleMain.UIBattleMain_C'");
+	AddUIInfo(EUINames::UIBattleMain, "WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'");
 }
 
 FUIConfig::~FUIConfig()
