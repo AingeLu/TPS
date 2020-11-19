@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class TPS_API UTPSAbilityTask : public UAbilityTask
 {
 	GENERATED_BODY()
