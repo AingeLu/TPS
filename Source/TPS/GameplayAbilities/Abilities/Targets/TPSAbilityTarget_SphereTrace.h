@@ -22,7 +22,7 @@ class TPS_API UTPSAbilityTarget_SphereTrace : public UTPSAbilityTarget
 
 public:
 	// Constructor and overrides
-	UTPSAbilityTarget_SphereTrace() {}
+	UTPSAbilityTarget_SphereTrace();
 
 	/** Uses the passed in event data */
 	virtual void GetTargets_Implementation(ATPSCharacter* TargetingCharacter, AActor* TargetingActor,
@@ -39,5 +39,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SphereTrace)
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SphereTrace)
+	bool bTraceComplex;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SphereTrace)
 	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SphereTrace)
+	bool bIgnoreSelf;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SphereTrace)
+	FLinearColor TraceColor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SphereTrace)
+	FLinearColor TraceHitColor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SphereTrace)
+	float DrawTime;
 };
