@@ -31,7 +31,8 @@ void UTPSAbilityTask_PlayMontageAndWaitForEvent::Activate()
 		if (AnimInstance != nullptr)
 		{
 			// Bind to event callback
-			EventHandle = RPGAbilitySystemComponent->AddGameplayEventTagContainerDelegate(EventTags, FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(this, &UTPSAbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent));
+			EventHandle = RPGAbilitySystemComponent->AddGameplayEventTagContainerDelegate(EventTags, FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(this,
+					&UTPSAbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent));
 
 			if (RPGAbilitySystemComponent->PlayMontage(Ability, Ability->GetCurrentActivationInfo(), MontageToPlay, Rate, StartSection) > 0.f)
 			{
@@ -41,7 +42,8 @@ void UTPSAbilityTask_PlayMontageAndWaitForEvent::Activate()
 					return;
 				}
 
-				CancelledHandle = Ability->OnGameplayAbilityCancelled.AddUObject(this, &UTPSAbilityTask_PlayMontageAndWaitForEvent::OnAbilityCancelled);
+				CancelledHandle = Ability->OnGameplayAbilityCancelled.AddUObject(this,
+					&UTPSAbilityTask_PlayMontageAndWaitForEvent::OnAbilityCancelled);
 
 				BlendingOutDelegate.BindUObject(this, &UTPSAbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut);
 				AnimInstance->Montage_SetBlendingOutDelegate(BlendingOutDelegate, MontageToPlay);

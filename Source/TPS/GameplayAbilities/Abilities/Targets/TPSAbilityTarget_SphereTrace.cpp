@@ -6,6 +6,7 @@
 
 UTPSAbilityTarget_SphereTrace::UTPSAbilityTarget_SphereTrace()
 {
+	bIgnoreSelf = true;
 	TraceColor = FLinearColor::Red;
 	TraceHitColor = FLinearColor::Green;
 	DrawTime = 5.0f;
