@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "TPSWeapon.generated.h"
 
+class USkeletalMeshComponent;
+
 UCLASS()
 class TPS_API ATPSWeapon : public AActor
 {
@@ -23,4 +25,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	/** Name of the MeshComponent. Use this name if you want to prevent creation of the component (with ObjectInitializer.DoNotCreateDefaultSubobject). */
+	static FName MeshComponentName;
+private:
+	/** The main skeletal mesh associated with this Weapon (optional sub-object). */
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Mesh;
 };

@@ -2,6 +2,9 @@
 
 
 #include "TPSWeapon.h"
+#include "Components/SkeletalMeshComponent.h"
+
+FName ATPSWeapon::MeshComponentName(TEXT("WeaponMesh0"));
 
 // Sets default values
 ATPSWeapon::ATPSWeapon()
@@ -9,6 +12,7 @@ ATPSWeapon::ATPSWeapon()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(ATPSWeapon::MeshComponentName);
 }
 
 // Called when the game starts or when spawned
