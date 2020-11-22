@@ -3,6 +3,7 @@
 
 #include "TPSWeapon.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "TPSCharacter.h"
 
 FName ATPSWeapon::MeshComponentName(TEXT("WeaponMesh0"));
 
@@ -29,3 +30,31 @@ void ATPSWeapon::Tick(float DeltaTime)
 
 }
 
+void ATPSWeapon::SetOwningPawn(ATPSCharacter* NewOwner)
+{
+	if (OwnerPawn != NewOwner)
+	{
+		SetInstigator(NewOwner);
+		OwnerPawn = NewOwner;
+		// net owner for RPC calls
+		SetOwner(NewOwner);
+	}
+}
+
+void ATPSWeapon::OnEnterInventory(ATPSCharacter* NewOwner)
+{
+	SetOwningPawn(NewOwner);
+}
+
+void ATPSWeapon::OnLeaveInventory()
+{
+	if (IsAttachedToPawn())
+	{
+		OnEnterInventory();
+	}
+
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		SetOwningPawn(NULL);
+	}
+}
