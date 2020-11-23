@@ -12,6 +12,9 @@ public class TPS : ModuleRules
 			"TPS",
 			"TPS/Components",
 
+			"TPS/Inventory",
+			"TPS/Inventory/Items",
+
 			"TPS/Ability",
 			"TPS/Ability/Abilities",
 			"TPS/Ability/Abilities/Tasks",
