@@ -4,10 +4,10 @@
 #include "TPSAssetManager.h"
 #include "AbilitySystemGlobals.h"
 
-const FPrimaryAssetType	UTPSAssetManager::PotionItemType = TEXT("Potion");
-const FPrimaryAssetType	UTPSAssetManager::SkillItemType = TEXT("Skill");
-const FPrimaryAssetType	UTPSAssetManager::TokenItemType = TEXT("Token");
+const FPrimaryAssetType	UTPSAssetManager::AbilityItemType = TEXT("Ability");
 const FPrimaryAssetType	UTPSAssetManager::WeaponItemType = TEXT("Weapon");
+const FPrimaryAssetType	UTPSAssetManager::PotionItemType = TEXT("Potion");
+const FPrimaryAssetType	UTPSAssetManager::TokenItemType = TEXT("Token");
 
 UTPSAssetManager& UTPSAssetManager::Get()
 {

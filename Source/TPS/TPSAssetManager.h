@@ -22,10 +22,10 @@ public:
 	virtual void StartInitialLoading() override;
 
 	/** Static types for items */
-	static const FPrimaryAssetType	PotionItemType;
-	static const FPrimaryAssetType	SkillItemType;
-	static const FPrimaryAssetType	TokenItemType;
+	static const FPrimaryAssetType	AbilityItemType;
 	static const FPrimaryAssetType	WeaponItemType;
+	static const FPrimaryAssetType	PotionItemType;
+	static const FPrimaryAssetType	TokenItemType;
 
 	/** Returns the current AssetManager object */
 	static UTPSAssetManager& Get();
