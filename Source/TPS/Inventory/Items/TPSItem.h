@@ -13,7 +13,7 @@ class UTPSAbility;
 /**
  * Base class for all items, do not blueprint directly
  */
-UCLASS()
+UCLASS(Abstract, BlueprintType)
 class TPS_API UTPSItem : public UPrimaryDataAsset
 {
 	GENERATED_BODY()

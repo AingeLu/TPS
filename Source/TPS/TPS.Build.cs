@@ -54,6 +54,8 @@ public class TPS : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"OnlineSubsystem",
 			"OnlineSubsystemUtils",
+			"Slate",
+			"SlateCore",
 			"UMG",
 			"GameplayAbilities",
 			"GameplayTags",
