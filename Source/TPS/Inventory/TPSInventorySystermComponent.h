@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "TPSInventoryTypes.h"
 #include "TPSInventorySystermComponent.generated.h"
 
 class UTPSItem;
@@ -26,11 +27,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	///** Map of all items owned by this player, from definition to data */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory)
-	//TMap<UTPSItem*, FTPSItemData> InventoryData;
+	/** Map of all items owned by this player, from definition to data */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory)
+	TMap<UTPSItem*, FTPSItemData> InventoryData;
 
-	///** Map of slot, from type/num to item, initialized from ItemSlotsPerType on RPGGameInstanceBase */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory)
-	//TMap<FTPSItemSlot, UTPSItem*> SlottedItems;
+	/** Map of slot, from type/num to item, initialized from ItemSlotsPerType on RPGGameInstanceBase */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory)
+	TMap<FTPSItemSlot, UTPSItem*> SlottedItems;
 };
