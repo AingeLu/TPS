@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "TPSInventorySystermComponent.generated.h"
 
+class UTPSItem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPS_API UTPSInventorySystermComponent : public UActorComponent
@@ -24,5 +25,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+public:
+	///** Map of all items owned by this player, from definition to data */
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory)
+	//TMap<UTPSItem*, FTPSItemData> InventoryData;
+
+	///** Map of slot, from type/num to item, initialized from ItemSlotsPerType on RPGGameInstanceBase */
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory)
+	//TMap<FTPSItemSlot, UTPSItem*> SlottedItems;
 };
