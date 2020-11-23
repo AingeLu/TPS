@@ -17,7 +17,7 @@ class UTPSItem;
 
 /** Struct representing a slot for an item, shown in the UI */
 USTRUCT(BlueprintType)
-struct ACTIONRPG_API FTPSItemSlot
+struct TPS_API FTPSItemSlot
 {
 	GENERATED_BODY()
 
@@ -69,7 +69,7 @@ struct ACTIONRPG_API FTPSItemSlot
 
 /** Extra information about a URPGItem that is in a player's inventory */
 USTRUCT(BlueprintType)
-struct ACTIONRPG_API FTPSItemData
+struct TPS_API FTPSItemData
 {
 	GENERATED_BODY()
 
