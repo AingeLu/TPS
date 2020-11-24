@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
 #include "TPSInventoryTypes.h"
-#include "TPSSaveGame.generated.h"
+#include "TPSInventorySaveGame.generated.h"
 
 /** List of versions, native code will handle fixups for any old versions */
-namespace ETPSSaveGameVersion
+namespace ETPSInventorySaveGameVersion
 {
 	enum type
 	{
@@ -29,16 +29,16 @@ namespace ETPSSaveGameVersion
  * Object that is written to and read from the save game archive, with a data version
  */
 UCLASS(BlueprintType)
-class TPS_API UTPSSaveGame : public USaveGame
+class TPS_API UTPSInventorySaveGame : public USaveGame
 {
 	GENERATED_BODY()
 	
 public:
 	/** Constructor */
-	UTPSSaveGame()
+	UTPSInventorySaveGame()
 	{
 		// Set to current version, this will get overwritten during serialization when loading
-		SavedDataVersion = ETPSSaveGameVersion::LatestVersion;
+		SavedDataVersion = ETPSInventorySaveGameVersion::LatestVersion;
 	}
 
 	/** Map of items to item data */

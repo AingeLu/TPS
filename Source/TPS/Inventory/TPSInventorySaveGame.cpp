@@ -1,15 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TPSSaveGame.h"
+#include "TPSInventorySaveGame.h"
 
-void UTPSSaveGame::Serialize(FArchive& Ar)
+void UTPSInventorySaveGame::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
-	if (Ar.IsLoading() && SavedDataVersion != ETPSSaveGameVersion::LatestVersion)
+	if (Ar.IsLoading() && SavedDataVersion != ETPSInventorySaveGameVersion::LatestVersion)
 	{
-		if (SavedDataVersion < ETPSSaveGameVersion::AddedItemData)
+		if (SavedDataVersion < ETPSInventorySaveGameVersion::AddedItemData)
 		{
 			// Convert from list to item data map
 			for (const FPrimaryAssetId& ItemId : InventoryItems_DEPRECATED)
@@ -20,6 +20,6 @@ void UTPSSaveGame::Serialize(FArchive& Ar)
 			InventoryItems_DEPRECATED.Empty();
 		}
 
-		SavedDataVersion = ETPSSaveGameVersion::LatestVersion;
+		SavedDataVersion = ETPSInventorySaveGameVersion::LatestVersion;
 	}
 }

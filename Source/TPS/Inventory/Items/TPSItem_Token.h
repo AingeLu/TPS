@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Asset/Items/TPSItem.h"
+#include "TPSItem.h"
 #include "TPSItem_Token.generated.h"
 
 /**

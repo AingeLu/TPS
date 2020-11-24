@@ -13,7 +13,7 @@
 #include "TPSInventoryTypes.generated.h"
 
 class UTPSItem;
-//class URPGSaveGame;
+class UTPSInventorySaveGame;
 
 /** Struct representing a slot for an item, shown in the UI */
 USTRUCT(BlueprintType)
@@ -125,3 +125,19 @@ struct TPS_API FTPSItemData
 		ItemLevel = FMath::Clamp(Other.ItemLevel, 1, MaxLevel);
 	}
 };
+
+/** Delegate called when an inventory item changes */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInventoryItemChanged, bool, bAdded, UTPSItem*, Item);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnInventoryItemChangedNative, bool, UTPSItem*);
+
+/** Delegate called when the contents of an inventory slot change */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSlottedItemChanged, FTPSItemSlot, ItemSlot, UTPSItem*, Item);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnSlottedItemChangedNative, FTPSItemSlot, UTPSItem*);
+
+/** Delegate called when the entire inventory has been loaded, all items may have been replaced */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryLoaded);
+DECLARE_MULTICAST_DELEGATE(FOnInventoryLoadedNative);
+
+/** Delegate called when the save game has been loaded/reset */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSaveGameLoaded, UTPSInventorySaveGame*, SaveGame);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnSaveGameLoadedNative, UTPSInventorySaveGame*);

@@ -20,12 +20,8 @@ public class TPS : ModuleRules
 			"TPS/Weapon",
 			"TPS/Weapon/Weapons",
 
-			"TPS/Asset",
-			"TPS/Asset/Items",
-
 			"TPS/Inventory",
-
-			"TPS/SaveGame",
+			"TPS/Inventory/Items",
 
 			"TPS/UI",
 			"TPS/UI/Battle",
