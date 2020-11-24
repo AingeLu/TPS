@@ -6,6 +6,8 @@
 #include "Engine/AssetManager.h"
 #include "TPSAssetManager.generated.h"
 
+class UTPSItem;
+
 /**
  * Game implementation of asset manager, overrides functionality and stores game-specific types
  * It is expected that most games will want to override AssetManager as it provides a good place for game-specific loading logic
@@ -37,5 +39,5 @@ public:
 	 * @param PrimaryAssetId The asset identifier to load
 	 * @param bDisplayWarning If true, this will log a warning if the item failed to load
 	 */
-	//URPGItem* ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning = true);
+	UTPSItem* ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning = true);
 };

@@ -12,9 +12,6 @@ public class TPS : ModuleRules
 			"TPS",
 			"TPS/Components",
 
-			"TPS/Inventory",
-			"TPS/Inventory/Items",
-
 			"TPS/Ability",
 			"TPS/Ability/Abilities",
 			"TPS/Ability/Abilities/Tasks",
@@ -22,6 +19,13 @@ public class TPS : ModuleRules
 
 			"TPS/Weapon",
 			"TPS/Weapon/Weapons",
+
+			"TPS/Asset",
+			"TPS/Asset/Items",
+
+			"TPS/Inventory",
+
+			"TPS/SaveGame",
 
 			"TPS/UI",
 			"TPS/UI/Battle",

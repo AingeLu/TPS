@@ -3,11 +3,14 @@
 
 #include "TPSAssetManager.h"
 #include "AbilitySystemGlobals.h"
+#include "TPSItem.h"
+
 
 const FPrimaryAssetType	UTPSAssetManager::AbilityItemType = TEXT("Ability");
 const FPrimaryAssetType	UTPSAssetManager::WeaponItemType = TEXT("Weapon");
 const FPrimaryAssetType	UTPSAssetManager::PotionItemType = TEXT("Potion");
 const FPrimaryAssetType	UTPSAssetManager::TokenItemType = TEXT("Token");
+
 
 UTPSAssetManager& UTPSAssetManager::Get()
 {
@@ -31,18 +34,17 @@ void UTPSAssetManager::StartInitialLoading()
 	UAbilitySystemGlobals::Get().InitGlobalData();
 }
 
+UTPSItem* UTPSAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning)
+{
+	FSoftObjectPath ItemPath = GetPrimaryAssetPath(PrimaryAssetId);
 
-//URPGItem* UTPSAssetManager::ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId, bool bLogWarning)
-//{
-//	FSoftObjectPath ItemPath = GetPrimaryAssetPath(PrimaryAssetId);
-//
-//	// This does a synchronous load and may hitch
-//	URPGItem* LoadedItem = Cast<URPGItem>(ItemPath.TryLoad());
-//
-//	if (bLogWarning && LoadedItem == nullptr)
-//	{
-//		UE_LOG(LogActionRPG, Warning, TEXT("Failed to load item for identifier %s!"), *PrimaryAssetId.ToString());
-//	}
-//
-//	return LoadedItem;
-//}
+	// This does a synchronous load and may hitch
+	UTPSItem* LoadedItem = Cast<UTPSItem>(ItemPath.TryLoad());
+
+	if (bLogWarning && LoadedItem == nullptr)
+	{
+		//UE_LOG(LogActionRPG, Warning, TEXT("Failed to load item for identifier %s!"), *PrimaryAssetId.ToString());
+	}
+
+	return LoadedItem;
+}
