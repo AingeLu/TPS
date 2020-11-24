@@ -3,11 +3,31 @@
 
 #include "TPSGameInstance.h"
 #include "TPSInventorySaveGame.h"
+#include "TPSAssetManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Engine/Private/AsyncActionLoadPrimaryAsset.h"
 
-UTPSInventorySaveGame* UTPSGameInstance::GetInventorySaveGame()
+void UTPSGameInstance::Init()
 {
-	return InventorySaveGame;
+	InitializeStoreItems();
+}
+
+void UTPSGameInstance::InitializeStoreItems()
+{
+	for (const TPair<FPrimaryAssetType, int32>& Pair : ItemSlotsPerType)
+	{
+		TArray<FPrimaryAssetId> OutPrimaryAssetIdList;
+		//UKismetSystemLibrary::GetPrimaryAssetIdList(Pair.Key, OutPrimaryAssetIdList);
+		if (UAssetManager* Manager = UAssetManager::GetIfValid())
+		{
+			if (Manager->GetPrimaryAssetIdList(Pair.Key, OutPrimaryAssetIdList))
+			{
+				const UAsyncActionLoadPrimaryAssetClassList* AsyncAction = UAsyncActionLoadPrimaryAssetList::AsyncLoadPrimaryAssetList(this, OutPrimaryAssetIdList, TArray<FName>());
+				//AsyncAction->Completed.Add(FOnPrimaryAssetClassListLoaded::BindUFunction(this, &UTPSGameInstance::HandleAsyncLoadPrimaryAsset));
+			}
+		}
+	}
 }
 
 void UTPSGameInstance::AddDefaultInventory(UTPSInventorySaveGame* SaveGame, bool bRemoveExtra)
@@ -40,6 +60,11 @@ bool UTPSGameInstance::IsValidItemSlot(FTPSItemSlot ItemSlot) const
 		}
 	}
 	return false;
+}
+
+UTPSInventorySaveGame* UTPSGameInstance::GetInventorySaveGame()
+{
+	return InventorySaveGame;
 }
 
 void UTPSGameInstance::SetSavingEnabled(bool bEnabled)
@@ -121,6 +146,11 @@ void UTPSGameInstance::ResetSaveGame()
 {
 	// Call handle function with no loaded save, this will reset the data
 	HandleSaveGameLoaded(nullptr);
+}
+
+void UTPSGameInstance::HandleAsyncLoadPrimaryAsset(const TArray<TSubclassOf<UObject>>& Loaded)
+{
+
 }
 
 void UTPSGameInstance::HandleAsyncSave(const FString& SlotName, const int32 UserIndex, bool bSuccess)

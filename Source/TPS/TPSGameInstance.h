@@ -21,9 +21,10 @@ class TPS_API UTPSGameInstance : public UGameInstance
 	GENERATED_BODY()
 	
 public:
-	/** Returns the current save game, so it can be used to initialize state. Changes are not written until WriteSaveGame is called */
-	UFUNCTION(BlueprintCallable, Category = Save)
-	UTPSInventorySaveGame* GetInventorySaveGame();
+	virtual void Init() override;
+
+public:
+	void InitializeStoreItems();
 
 	/**
 	* Adds the default inventory to the inventory array
@@ -36,6 +37,10 @@ public:
 	/** Returns true if this is a valid inventory slot */
 	UFUNCTION(BlueprintCallable, Category = Inventory)
 	bool IsValidItemSlot(FTPSItemSlot ItemSlot) const;
+
+	/** Returns the current save game, so it can be used to initialize state. Changes are not written until WriteSaveGame is called */
+	UFUNCTION(BlueprintCallable, Category = Save)
+	UTPSInventorySaveGame* GetInventorySaveGame();
 
 	/** Sets rather save/load is enabled. If disabled it will always count as a new character */
 	UFUNCTION(BlueprintCallable, Category = Save)
@@ -62,6 +67,9 @@ public:
 	void ResetSaveGame();
 
 protected:
+	/** Called when the async save happens */
+	virtual void HandleAsyncLoadPrimaryAsset(const TArray<TSubclassOf<UObject>>& Loaded);
+
 	/** Called when the async save happens */
 	virtual void HandleAsyncSave(const FString& SlotName, const int32 UserIndex, bool bSuccess);
 

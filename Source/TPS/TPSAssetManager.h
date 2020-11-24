@@ -32,6 +32,9 @@ public:
 	/** Returns the current AssetManager object */
 	static UTPSAssetManager& Get();
 
+	/** Returns the current AssetManager object if it exists, null otherwise */
+	static UTPSAssetManager* GetIfValid();
+
 	/**
 	 * Synchronously loads an RPGItem subclass, this can hitch but is useful when you cannot wait for an async load
 	 * This does not maintain a reference to the item so it will garbage collect if not loaded some other way
