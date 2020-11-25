@@ -67,7 +67,8 @@ public:
 	void ResetSaveGame();
 
 protected:
-	/** Called when the async save happens */
+	/** Called when the async Load happens */
+	UFUNCTION()
 	virtual void HandleAsyncLoadPrimaryAsset(const TArray<TSubclassOf<UObject>>& Loaded);
 
 	/** Called when the async save happens */
