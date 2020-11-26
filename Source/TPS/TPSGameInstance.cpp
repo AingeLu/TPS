@@ -27,10 +27,13 @@ void UTPSGameInstance::InitializeStoreItems()
 				TSharedPtr<FStreamableHandle> LoadHandle = Manager->LoadPrimaryAssets(OutPrimaryAssetIdList, LoadBundles);
 				if (LoadHandle.IsValid())
 				{
-					if (!LoadHandle->HasLoadCompleted())
+					if (LoadHandle->HasLoadCompleted())
 					{
-						LoadHandle->BindCompleteDelegate(FStreamableDelegate::CreateUObject(this, &UTPSGameInstance::HandleAsyncLoadPrimaryAsset));
-						return;
+						HandleLoadCompleted();
+					}
+					else
+					{
+						LoadHandle->BindCompleteDelegate(FStreamableDelegate::CreateUObject(this, &UTPSGameInstance::HandleLoadCompleted));
 					}
 				}
 			}
@@ -38,7 +41,7 @@ void UTPSGameInstance::InitializeStoreItems()
 	}
 }
 
-void UTPSGameInstance::HandleAsyncLoadPrimaryAsset(const TArray<TSubclassOf<UObject>>& Loaded)
+void UTPSGameInstance::HandleLoadCompleted()
 {
 
 }

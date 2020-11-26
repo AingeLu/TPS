@@ -69,7 +69,7 @@ public:
 protected:
 	/** Called when the async Load happens */
 	UFUNCTION()
-	virtual void HandleAsyncLoadPrimaryAsset(const TArray<TSubclassOf<UObject>>& Loaded);
+	virtual void HandleLoadCompleted();
 
 	/** Called when the async save happens */
 	virtual void HandleAsyncSave(const FString& SlotName, const int32 UserIndex, bool bSuccess);
