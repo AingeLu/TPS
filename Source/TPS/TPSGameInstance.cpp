@@ -10,6 +10,8 @@
 
 void UTPSGameInstance::Init()
 {
+	Super::Init();
+
 	InitializeStoreItems();
 }
 
