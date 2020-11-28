@@ -29,3 +29,19 @@ bool FUIConfig::GetUIInfo(EUINames name, FUIInfo& outInfo)
 
 	return false;
 }
+
+void FUIConfig::AddUIInfo(FString name, FString path, uint8 layer, EUIMode mode)
+{
+	UIInfoMap.Add(name, FUIInfo(path, layer, mode));
+}
+
+bool FUIConfig::GetUIInfo(FString name, FUIInfo& outInfo)
+{
+	if (UIInfoMap.Contains(name) && UIInfoMap.Find(name))
+	{
+		outInfo = *UIInfoMap.Find(name);
+		return true;
+	}
+
+	return false;
+}

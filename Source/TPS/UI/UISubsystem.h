@@ -31,6 +31,9 @@ public:
 	/** Implement this for deinitialization of instances of the system */
 	void Deinitialize() override;
 
+private:
+	void ReadUIConifg();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void Open(EUINames name);

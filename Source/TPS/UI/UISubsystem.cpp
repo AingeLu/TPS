@@ -3,6 +3,11 @@
 
 #include "UISubsystem.h"
 #include "Blueprint/UserWidget.h"
+#include "Json.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonWriter.h"
+#include "Serialization/JsonSerializer.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogUISub, Log, All);
 
@@ -28,6 +33,7 @@ void UUISubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
+    ReadUIConifg();
 }
 
 /** Implement this for deinitialization of instances of the system */
@@ -35,6 +41,31 @@ void UUISubsystem::Deinitialize()
 {
 	Super::Deinitialize();
 
+}
+
+void UUISubsystem::ReadUIConifg()
+{
+    // JSON
+    FString uiConfigPath = FPaths::ProjectContentDir() + TEXT("UMG/DataTables/UIConfig.json");
+    if (FPaths::FileExists(uiConfigPath))
+    {
+        FString fileStr;
+        if (FFileHelper::LoadFileToString(fileStr, *uiConfigPath))
+        {
+            TArray<TSharedPtr<FJsonValue>> OutArray;
+            TSharedRef<TJsonReader<>> JsonReader = TJsonReaderFactory<>::Create(fileStr);
+            if (FJsonSerializer::Deserialize(JsonReader, OutArray))
+            {
+                for (TSharedPtr<FJsonValue>& Val : OutArray)
+                {
+                    const TSharedPtr<FJsonObject>& Obj = Val.Get()->AsObject();
+                    FString Name = Obj.Get()->GetStringField("Name");
+                    FString Path = Obj.Get()->GetStringField("path");
+                    UIConfig.AddUIInfo(Name, Path);
+                }
+            }
+        }
+    }
 }
 
 void UUISubsystem::Open(EUINames name)

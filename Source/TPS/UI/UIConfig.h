@@ -68,6 +68,9 @@ public:
 	void AddUIInfo(EUINames name, FString path, uint8 layer = 1, EUIMode mode = EUIMode::MODE_MAIN);
 	bool GetUIInfo(EUINames name, FUIInfo& outInfo);
 
+	void AddUIInfo(FString name, FString path, uint8 layer = 1, EUIMode mode = EUIMode::MODE_MAIN);
+	bool GetUIInfo(FString name, FUIInfo& outInfo);
 private:
 	TMap<EUINames, FUIInfo> UIMap;
+	TMap<FString, FUIInfo> UIInfoMap;
 };
