@@ -1,0 +1,4 @@
+---,path
+UIBattleMain,"WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'"
+UILoginMain,"WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'"
+UILobbyMain,"WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'"
