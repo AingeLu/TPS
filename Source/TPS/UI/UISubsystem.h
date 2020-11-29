@@ -33,6 +33,8 @@ public:
 
 private:
 	void ReadUIConifg();
+	void CreateXmlParser();
+	void ReadXmlParser(const FString& _XmlPath);
 
 public:
 	UFUNCTION(BlueprintCallable)

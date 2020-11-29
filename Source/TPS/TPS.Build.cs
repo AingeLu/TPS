@@ -51,6 +51,7 @@ public class TPS : ModuleRules
 			"GameplayTasks",
 			"Json",
 			"JsonUtilities",
+			"XmlParser",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {

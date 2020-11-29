@@ -4,10 +4,12 @@
 #include "UISubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "Json.h"
+#include "Dom/JsonValue.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
+#include "XmlFile.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogUISub, Log, All);
 
@@ -64,6 +66,39 @@ void UUISubsystem::ReadUIConifg()
                     UIConfig.AddUIInfo(Name, Path);
                 }
             }
+        }
+    }
+}
+
+void UUISubsystem::CreateXmlParser()
+{
+    //xml的内容
+    const FString _XmlContent = "nn< ID>01 nABnBCDnn";
+    //以Buffer的方式构建一个XmlFile对象
+    FXmlFile* _WriteXml = new FXmlFile(_XmlContent, EConstructMethod::ConstructFromBuffer);
+    //保存xml文件 FPaths::GameDir()表示当前工程的路径
+    _WriteXml->Save(FPaths::ProjectContentDir() + "test.xml");
+
+    //GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, "create success!");
+}
+
+void UUISubsystem::ReadXmlParser(const FString& _XmlPath)
+{
+    //创建一个XmlFile的对象
+    FXmlFile* _XmlFile = new FXmlFile(*_XmlPath);
+    //获取XmlFile的根节点
+    FXmlNode* _RootNode = _XmlFile->GetRootNode();
+    //获取根节点下的所有子节点
+    const TArray<FXmlNode> assetNodes = _RootNode->GetChildrenNodes();
+    for (int i = 0; i < assetNodes.Num(); i++)
+    {
+        const TArray<FXmlNode> contentNodes = assetNodes[i]->GetChildrenNodes();
+
+        for (int i = 0; i < contentNodes.Num(); i++)
+        {
+            //获取并打印出节点内容
+            FString _TContent = contentNodes[i]->GetContent();
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, _TContent);
         }
     }
 }
