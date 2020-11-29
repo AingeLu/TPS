@@ -1,14 +1,7 @@
 [
 	{
 		"Name": "UIBattleMain",
-		"path": "WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'"
-	},
-	{
-		"Name": "UILoginMain",
-		"path": "WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'"
-	},
-	{
-		"Name": "UILobbyMain",
+		"index": 1,
 		"path": "WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'"
 	}
 ]
