@@ -1,2 +1,2 @@
----,Name,Path,Mode,Layer
-UIBattleMain,"UIBattleMain","WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'","MODE_MAIN","1"
+---,Name,Path,UserWidget,Mode,Layer
+UIBattleMain,"UIBattleMain","WidgetBlueprint'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'","WidgetBlueprintGeneratedClass'/Game/UMG/Battle/UIBattleMain.UIBattleMain_C'","MODE_MAIN","1"
