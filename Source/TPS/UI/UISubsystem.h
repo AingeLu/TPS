@@ -33,8 +33,8 @@ public:
 
 private:
 	void ReadUIConifg_DataTable();
-	void ReadUIConifg_Json();
 	void ReadUIConifg_csv();
+	void ReadUIConifg_Json();
 	
 	void CreateXmlParser();
 	void ReadXmlParser(const FString& _XmlPath);

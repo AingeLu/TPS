@@ -2,15 +2,19 @@
 
 
 #include "UISubsystem.h"
+#include "UITypes.h"
 #include "Blueprint/UserWidget.h"
+
+#include "Serialization/Csv/CsvParser.h"
+
 #include "Json.h"
 #include "Dom/JsonValue.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
+
 #include "XmlFile.h"
-#include "UITypes.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogUISub, Log, All);
 
@@ -36,7 +40,8 @@ void UUISubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-    ReadUIConifg_DataTable();
+    //ReadUIConifg_DataTable();
+    ReadUIConifg_csv();
     //ReadUIConifg_Json();
 
     CreateXmlParser();
@@ -52,12 +57,12 @@ void UUISubsystem::Deinitialize()
 
 void UUISubsystem::ReadUIConifg_DataTable()
 {
-    UDataTable* UIDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/UMG/DataTables/DT_UIConfig.DT_UIConfig'"));
-    if (UIDataTable)
+    UDataTable* DataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/UMG/DataTables/DT_UIConfig.DT_UIConfig'"));
+    if (DataTable)
     {
         static const FString ContextString(TEXT("GENERAL"));
         TArray<FUITableRow*> OutRowArray;
-        UIDataTable->GetAllRows(ContextString, OutRowArray);
+        DataTable->GetAllRows(ContextString, OutRowArray);
         for (const FUITableRow* val : OutRowArray)
         {
             UIConfig.AddUIInfo(val->Name, val->Path, val->Layer, val->Mode);
@@ -65,16 +70,50 @@ void UUISubsystem::ReadUIConifg_DataTable()
     }
 }
 
+void UUISubsystem::ReadUIConifg_csv()
+{
+    // 动态读取csv文件，不过，这个只能在Editor模式运行，如果需要在发布版中运行，那么自己新建一个类
+    FString FilePath = FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir()) + FString::Printf(TEXT("UMG/DataTables/DT_UIConfig.csv"));
+    if (FPaths::FileExists(FilePath))
+    {
+        FString FileData;
+        if (FFileHelper::LoadFileToString(FileData, *FilePath))
+        {
+            UDataTable* DataTable = NewObject<UDataTable>(GetTransientPackage(), FName(TEXT("CSV_Test")));
+            DataTable->RowStruct = FUITableRow::StaticStruct();
+            DataTable->CreateTableFromCSVString(FileData);
+
+            static const FString ContextString(TEXT("GENERAL"));
+            TArray<FUITableRow*> OutRowArray;
+            DataTable->GetAllRows(ContextString, OutRowArray);
+            for (const FUITableRow* val : OutRowArray)
+            {
+                UIConfig.AddUIInfo(val->Name, val->Path, val->Layer, val->Mode);
+            }
+
+            FCsvParser* CsvParser = new FCsvParser(FileData);
+            TArray<TArray<const TCHAR*>> content = CsvParser->GetRows();
+            for (TArray<const TCHAR*>& iter : content)
+            {
+                for (const TCHAR*& chr : iter)
+                {
+
+                }
+            }
+        }
+    }
+}
+
 void UUISubsystem::ReadUIConifg_Json()
 {
-    FString uiConfigPath = FPaths::ProjectContentDir() + TEXT("UMG/DataTables/UIConfig.json");
-    if (FPaths::FileExists(uiConfigPath))
+    FString FilePath = FPaths::ProjectContentDir() + TEXT("UMG/DataTables/UIConfig.json");
+    if (FPaths::FileExists(FilePath))
     {
-        FString fileStr;
-        if (FFileHelper::LoadFileToString(fileStr, *uiConfigPath))
+        FString FileData;
+        if (FFileHelper::LoadFileToString(FileData, *FilePath))
         {
             TArray<TSharedPtr<FJsonValue>> OutArray;
-            TSharedRef<TJsonReader<>> JsonReader = TJsonReaderFactory<>::Create(fileStr);
+            TSharedRef<TJsonReader<>> JsonReader = TJsonReaderFactory<>::Create(FileData);
             if (FJsonSerializer::Deserialize(JsonReader, OutArray))
             {
                 for (TSharedPtr<FJsonValue>& Val : OutArray)
@@ -87,11 +126,6 @@ void UUISubsystem::ReadUIConifg_Json()
             }
         }
     }
-}
-
-void UUISubsystem::ReadUIConifg_csv()
-{
-
 }
 
 void UUISubsystem::CreateXmlParser()
