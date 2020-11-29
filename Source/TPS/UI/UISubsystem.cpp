@@ -36,8 +36,8 @@ void UUISubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-    //ReadUIConifg_Json();
     ReadUIConifg_DataTable();
+    //ReadUIConifg_Json();
 
     CreateXmlParser();
     ReadXmlParser(FPaths::ProjectContentDir() + "test.xml");
@@ -48,6 +48,21 @@ void UUISubsystem::Deinitialize()
 {
 	Super::Deinitialize();
 
+}
+
+void UUISubsystem::ReadUIConifg_DataTable()
+{
+    UDataTable* UIDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/UMG/DataTables/DT_UIConfig.DT_UIConfig'"));
+    if (UIDataTable)
+    {
+        static const FString ContextString(TEXT("GENERAL"));
+        TArray<FUITableRow*> OutRowArray;
+        UIDataTable->GetAllRows(ContextString, OutRowArray);
+        for (const FUITableRow* val : OutRowArray)
+        {
+            UIConfig.AddUIInfo(val->Name, val->Path, val->Layer, val->Mode);
+        }
+    }
 }
 
 void UUISubsystem::ReadUIConifg_Json()
@@ -74,19 +89,9 @@ void UUISubsystem::ReadUIConifg_Json()
     }
 }
 
-void UUISubsystem::ReadUIConifg_DataTable()
+void UUISubsystem::ReadUIConifg_csv()
 {
-    UDataTable* UIDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/UMG/DataTables/DT_UIConfig.DT_UIConfig'"));
-    if (UIDataTable)
-    {
-        static const FString ContextString(TEXT("GENERAL"));
-        TArray<FUITableRow*> OutRowArray;
-        UIDataTable->GetAllRows(ContextString, OutRowArray);
-        for (const FUITableRow* val : OutRowArray)
-        {
-            UIConfig.AddUIInfo(val->Name, val->Path, val->Layer, val->Mode);
-        }
-    }
+
 }
 
 void UUISubsystem::CreateXmlParser()
