@@ -94,6 +94,9 @@ void UUISubsystem::ReadXmlParser(const FString& _XmlPath)
     const TArray<FXmlNode*> assetNodes = _RootNode->GetChildrenNodes();
     for (int i = 0; i < assetNodes.Num(); i++)
     {
+        FString _TContent = assetNodes[i]->GetContent();
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, _TContent);
+
         const TArray<FXmlNode*> contentNodes = assetNodes[i]->GetChildrenNodes();
         for (int k = 0; k < contentNodes.Num(); k++)
         {
