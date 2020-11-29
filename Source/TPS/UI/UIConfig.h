@@ -7,6 +7,15 @@
 #include "UIConfig.generated.h"
 
 UENUM(BlueprintType)
+enum class EUINames : uint8
+{
+	NONE = 0,
+	UIBattleMain,
+
+	MAX,
+};
+
+UENUM(BlueprintType)
 enum class EUIMode : uint8
 {
 	NONE = 0,
@@ -42,15 +51,6 @@ public:
 	uint8	Layer;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI)
 	EUIMode Mode;
-};
-
-UENUM(BlueprintType)
-enum class EUINames : uint8
-{
-	NONE = 0,
-	UIBattleMain,
-
-	MAX,
 };
 
 /**

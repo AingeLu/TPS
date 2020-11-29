@@ -36,6 +36,8 @@ void UUISubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	Super::Initialize(Collection);
 
     ReadUIConifg();
+    CreateXmlParser();
+    ReadXmlParser(FPaths::ProjectContentDir() + "test.xml");
 }
 
 /** Implement this for deinitialization of instances of the system */
@@ -61,9 +63,9 @@ void UUISubsystem::ReadUIConifg()
                 for (TSharedPtr<FJsonValue>& Val : OutArray)
                 {
                     const TSharedPtr<FJsonObject>& Obj = Val.Get()->AsObject();
-                    FString Name = Obj.Get()->GetStringField("Name");
+                    EUINames name = EUINames(Obj.Get()->GetNumberField("index"));
                     FString Path = Obj.Get()->GetStringField("path");
-                    UIConfig.AddUIInfo(Name, Path);
+                    UIConfig.AddUIInfo(name, Path);
                 }
             }
         }
@@ -73,13 +75,13 @@ void UUISubsystem::ReadUIConifg()
 void UUISubsystem::CreateXmlParser()
 {
     //xml的内容
-    const FString _XmlContent = "nn< ID>01 nABnBCDnn";
+    const FString _XmlContent = "<note><body>Don't forget the meeting!</body></note > ";
     //以Buffer的方式构建一个XmlFile对象
     FXmlFile* _WriteXml = new FXmlFile(_XmlContent, EConstructMethod::ConstructFromBuffer);
     //保存xml文件 FPaths::GameDir()表示当前工程的路径
     _WriteXml->Save(FPaths::ProjectContentDir() + "test.xml");
 
-    //GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, "create success!");
+    GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, "create success!");
 }
 
 void UUISubsystem::ReadXmlParser(const FString& _XmlPath)
@@ -89,15 +91,14 @@ void UUISubsystem::ReadXmlParser(const FString& _XmlPath)
     //获取XmlFile的根节点
     FXmlNode* _RootNode = _XmlFile->GetRootNode();
     //获取根节点下的所有子节点
-    const TArray<FXmlNode> assetNodes = _RootNode->GetChildrenNodes();
+    const TArray<FXmlNode*> assetNodes = _RootNode->GetChildrenNodes();
     for (int i = 0; i < assetNodes.Num(); i++)
     {
-        const TArray<FXmlNode> contentNodes = assetNodes[i]->GetChildrenNodes();
-
-        for (int i = 0; i < contentNodes.Num(); i++)
+        const TArray<FXmlNode*> contentNodes = assetNodes[i]->GetChildrenNodes();
+        for (int k = 0; k < contentNodes.Num(); k++)
         {
             //获取并打印出节点内容
-            FString _TContent = contentNodes[i]->GetContent();
+            FString _TContent = contentNodes[k]->GetContent();
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, _TContent);
         }
     }
