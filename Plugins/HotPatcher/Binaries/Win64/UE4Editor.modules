@@ -1,0 +1,9 @@
+{
+	"BuildId": "4b38ac38-b8b3-4461-9b0a-d281937e7e39",
+	"Modules": 
+	{
+		"AssetManagerEx": "UE4Editor-AssetManagerEx.dll",
+		"HotPatcherEditor": "UE4Editor-HotPatcherEditor.dll",
+		"HotPatcherRuntime": "UE4Editor-HotPatcherRuntime.dll"
+	}
+}
