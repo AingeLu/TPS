@@ -32,7 +32,8 @@ public:
 	void Deinitialize() override;
 
 private:
-	void ReadUIConifg();
+	void ReadUIConifg_Json();
+	void ReadUIConifg_DataTable();
 	void CreateXmlParser();
 	void ReadXmlParser(const FString& _XmlPath);
 

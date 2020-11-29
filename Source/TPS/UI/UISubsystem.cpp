@@ -10,6 +10,7 @@
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
 #include "XmlFile.h"
+#include "UITypes.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogUISub, Log, All);
 
@@ -35,7 +36,9 @@ void UUISubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-    ReadUIConifg();
+    //ReadUIConifg_Json();
+    ReadUIConifg_DataTable();
+
     CreateXmlParser();
     ReadXmlParser(FPaths::ProjectContentDir() + "test.xml");
 }
@@ -47,9 +50,8 @@ void UUISubsystem::Deinitialize()
 
 }
 
-void UUISubsystem::ReadUIConifg()
+void UUISubsystem::ReadUIConifg_Json()
 {
-    // JSON
     FString uiConfigPath = FPaths::ProjectContentDir() + TEXT("UMG/DataTables/UIConfig.json");
     if (FPaths::FileExists(uiConfigPath))
     {
@@ -64,10 +66,25 @@ void UUISubsystem::ReadUIConifg()
                 {
                     const TSharedPtr<FJsonObject>& Obj = Val.Get()->AsObject();
                     EUINames name = EUINames(Obj.Get()->GetNumberField("index"));
-                    FString Path = Obj.Get()->GetStringField("path");
-                    UIConfig.AddUIInfo(name, Path);
+                    FString path = Obj.Get()->GetStringField("path");
+                    UIConfig.AddUIInfo(name, path);
                 }
             }
+        }
+    }
+}
+
+void UUISubsystem::ReadUIConifg_DataTable()
+{
+    UDataTable* UIDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/UMG/DataTables/DT_UIConfig.DT_UIConfig'"));
+    if (UIDataTable)
+    {
+        static const FString ContextString(TEXT("GENERAL"));
+        TArray<FUITableRow*> OutRowArray;
+        UIDataTable->GetAllRows(ContextString, OutRowArray);
+        for (const FUITableRow* val : OutRowArray)
+        {
+            UIConfig.AddUIInfo(val->Name, val->Path, val->Layer, val->Mode);
         }
     }
 }

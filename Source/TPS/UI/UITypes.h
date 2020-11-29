@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "UIConfig.h"
 #include "UITypes.generated.h"
 
 /**
@@ -18,8 +19,14 @@ struct FUITableRow : public FTableRowBase
 	virtual ~FUITableRow() { }
 
 	UPROPERTY(EditAnywhere, Category = DataTable)
-	uint16 index : 1;
+	EUINames Name;
 
 	UPROPERTY(EditAnywhere, Category = DataTable)
-	FString path;
+	FString Path;
+
+	UPROPERTY(EditAnywhere, Category = DataTable)
+	EUIMode Mode;
+
+	UPROPERTY(EditAnywhere, Category = DataTable)
+	uint8 Layer;
 };
