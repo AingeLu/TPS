@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Blueprint/UserWidget.h"
 #include "UIConfig.h"
 #include "UITypes.generated.h"
 
@@ -23,6 +24,9 @@ struct FUITableRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = DataTable)
 	FString Path;
+
+	UPROPERTY(EditAnywhere, Category = DataTable)
+	TSubclassOf<UUserWidget> UserWidget;
 
 	UPROPERTY(EditAnywhere, Category = DataTable)
 	EUIMode Mode;
