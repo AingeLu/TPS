@@ -82,7 +82,7 @@ void UUISubsystem::ReadUIConifg_csv()
             UDataTable* DataTable = NewObject<UDataTable>(GetTransientPackage(), FName(TEXT("CSV_Test")));
             DataTable->RowStruct = FUITableRow::StaticStruct();
             DataTable->CreateTableFromCSVString(FileData);
-
+            //
             static const FString ContextString(TEXT("GENERAL"));
             TArray<FUITableRow*> OutRowArray;
             DataTable->GetAllRows(ContextString, OutRowArray);
@@ -91,15 +91,15 @@ void UUISubsystem::ReadUIConifg_csv()
                 UIConfig.AddUIInfo(val->Name, val->Path, val->Layer, val->Mode);
             }
 
-            FCsvParser* CsvParser = new FCsvParser(FileData);
-            TArray<TArray<const TCHAR*>> content = CsvParser->GetRows();
-            for (TArray<const TCHAR*>& iter : content)
-            {
-                for (const TCHAR*& chr : iter)
-                {
+            //FCsvParser* CsvParser = new FCsvParser(FileData);
+            //TArray<TArray<const TCHAR*>> content = CsvParser->GetRows();
+            //for (TArray<const TCHAR*>& iter : content)
+            //{
+            //    for (const TCHAR*& chr : iter)
+            //    {
 
-                }
-            }
+            //    }
+            //}
         }
     }
 }
@@ -112,18 +112,30 @@ void UUISubsystem::ReadUIConifg_Json()
         FString FileData;
         if (FFileHelper::LoadFileToString(FileData, *FilePath))
         {
-            TArray<TSharedPtr<FJsonValue>> OutArray;
-            TSharedRef<TJsonReader<>> JsonReader = TJsonReaderFactory<>::Create(FileData);
-            if (FJsonSerializer::Deserialize(JsonReader, OutArray))
+            UDataTable* DataTable = NewObject<UDataTable>(GetTransientPackage(), FName(TEXT("JSON_Test")));
+            DataTable->RowStruct = FUITableRow::StaticStruct();
+            DataTable->CreateTableFromJSONString(FileData);
+            //
+            static const FString ContextString(TEXT("GENERAL"));
+            TArray<FUITableRow*> OutRowArray;
+            DataTable->GetAllRows(ContextString, OutRowArray);
+            for (const FUITableRow* val : OutRowArray)
             {
-                for (TSharedPtr<FJsonValue>& Val : OutArray)
-                {
-                    const TSharedPtr<FJsonObject>& Obj = Val.Get()->AsObject();
-                    EUINames name = EUINames(Obj.Get()->GetNumberField("index"));
-                    FString path = Obj.Get()->GetStringField("path");
-                    UIConfig.AddUIInfo(name, path);
-                }
+                UIConfig.AddUIInfo(val->Name, val->Path, val->Layer, val->Mode);
             }
+
+            //TArray<TSharedPtr<FJsonValue>> OutArray;
+            //TSharedRef<TJsonReader<>> JsonReader = TJsonReaderFactory<>::Create(FileData);
+            //if (FJsonSerializer::Deserialize(JsonReader, OutArray))
+            //{
+            //    for (TSharedPtr<FJsonValue>& Val : OutArray)
+            //    {
+            //        const TSharedPtr<FJsonObject>& Obj = Val.Get()->AsObject();
+            //        EUINames name = EUINames(Obj.Get()->GetNumberField("index"));
+            //        FString path = Obj.Get()->GetStringField("path");
+            //        UIConfig.AddUIInfo(name, path);
+            //    }
+            //}
         }
     }
 }
