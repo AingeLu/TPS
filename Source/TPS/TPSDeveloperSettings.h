@@ -15,7 +15,7 @@ class TPS_API UTPSDeveloperSettings : public UDeveloperSettings
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, DisplayName = TPSDeveloperSettings)
 	static UTPSDeveloperSettings* Get() { return GetMutableDefault<UTPSDeveloperSettings>(); }
 
 public:
@@ -30,5 +30,5 @@ public:
 
 public:
 	UPROPERTY(config, EditAnyWhere, BlueprintReadWrite, Category = Defalut)
-	FString ProjectName;
+	FString ProjectName = "ProjectName";
 };
