@@ -182,10 +182,19 @@ protected:
 	UPROPERTY()
 	int8 bAbilitiesInitialized;
 
+	UFUNCTION()
+	void OnRep_TestProp();
+
+	UPROPERTY(Replicated, ReplicatedUsing = OnRep_TestProp)
+	int32 TestProp;
+
 public:
 	void CallServerFunction();
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
 	void ServerFunction(int a);
+
+	UFUNCTION(BlueprintCallable)
+	void BlueprintCallableFunction(int a);
 };
 

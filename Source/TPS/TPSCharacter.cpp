@@ -139,6 +139,7 @@ void ATPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ATPSCharacter, CharacterLevel);
+	DOREPLIFETIME(ATPSCharacter, TestProp);
 }
 
 UAbilitySystemComponent* ATPSCharacter::GetAbilitySystemComponent() const
@@ -322,10 +323,6 @@ void ATPSCharacter::CallServerFunction()
 	ServerFunction(10);
 }
 
-//void ATPSCharacter::ServerFunction(int a)
-//{
-//
-//}
 
 bool ATPSCharacter::ServerFunction_Validate(int a)
 {
@@ -334,6 +331,16 @@ bool ATPSCharacter::ServerFunction_Validate(int a)
 
 void ATPSCharacter::ServerFunction_Implementation(int a)
 {
-	int temp = a;
-	UE_LOG(LogTPSCharacter, Log, TEXT("ATPSCharacter::ServerFunction %d"), temp);
+	TestProp = a;
+	UE_LOG(LogTPSCharacter, Log, TEXT("ATPSCharacter::ServerFunction_Implementation %d"), a);
+}
+
+void ATPSCharacter::OnRep_TestProp()
+{
+	UE_LOG(LogTPSCharacter, Log, TEXT("ATPSCharacter::OnRep_TestProp %d"), TestProp);
+}
+
+void ATPSCharacter::BlueprintCallableFunction(int a)
+{
+	UE_LOG(LogTPSCharacter, Log, TEXT("ATPSCharacter::BlueprintCallableFunction %d"), a);
 }

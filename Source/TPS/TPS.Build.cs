@@ -10,6 +10,9 @@ public class TPS : ModuleRules
 
 		PublicIncludePaths.AddRange(new string[] {
 			"TPS",
+			
+			"TPS/Asset",
+
 			"TPS/Components",
 
 			"TPS/Ability",

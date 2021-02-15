@@ -7,6 +7,7 @@
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
+#include "GameFramework/PlayerController.h"
 
 UTPSAttributeSet::UTPSAttributeSet()
 	: Health(1.f)
@@ -66,7 +67,7 @@ void UTPSAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 
 	// Get the Target actor, which should be our owner
 	AActor* TargetActor = nullptr;
-	AController* TargetController = nullptr;
+	APlayerController* TargetController = nullptr;
 	ATPSCharacter* TargetCharacter = nullptr;
 	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
 	{
@@ -79,7 +80,7 @@ void UTPSAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	{
 		// Get the Source actor
 		AActor* SourceActor = nullptr;
-		AController* SourceController = nullptr;
+		APlayerController* SourceController = nullptr;
 		ATPSCharacter* SourceCharacter = nullptr;
 		if (Source && Source->AbilityActorInfo.IsValid() && Source->AbilityActorInfo->AvatarActor.IsValid())
 		{
@@ -89,7 +90,7 @@ void UTPSAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 			{
 				if (APawn* Pawn = Cast<APawn>(SourceActor))
 				{
-					SourceController = Pawn->GetController();
+					SourceController = Cast<APlayerController>(Pawn->GetController());
 				}
 			}
 
