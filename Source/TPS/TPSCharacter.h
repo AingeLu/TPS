@@ -196,5 +196,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void BlueprintCallableFunction(int a);
+
+	/** Executed when the Animation is initialized */
+	UFUNCTION(BlueprintImplementableEvent)
+	void CallBlueprintImplementableEvent();
 };
 

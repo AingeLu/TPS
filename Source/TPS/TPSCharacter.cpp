@@ -239,7 +239,8 @@ void ATPSCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ATPSCharacter::CallServerFunction);
+	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ATPSCharacter::CallServerFunction);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ATPSCharacter::CallBlueprintImplementableEvent);
 	//PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATPSCharacter::MoveForward);
